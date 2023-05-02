@@ -357,7 +357,7 @@ void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
         x2 < 0 || x2 >= m_image[0].width() - 1) {
         for (int yi = ystart; yi <= yend; ++yi) {
             int xstart = xl;
-            int xend = xr + 0.5;
+            int xend = xr;
             qreal ui = ul;
             qreal vi = vl;
             qreal zi = zl;
@@ -474,7 +474,7 @@ void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
     } else {
         for (int yi = ystart; yi <= yend; ++yi) {
             int xstart = xl;
-            int xend = xr + 0.5;
+            int xend = xr;
             qreal ui = ul;
             qreal vi = vl;
             qreal zi = zl;

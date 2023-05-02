@@ -152,10 +152,10 @@ Rectangle {
 
                 Vector3dAnimation on rotation {
                     loops: Animation.Infinite
-                    duration: 15000
+                    duration: 5000
                     from: Qt.vector3d(0, 0, 0)
                     to: Qt.vector3d(360, 360, 360)
-                    running: false
+                    running: true
                 }
             }
         ]

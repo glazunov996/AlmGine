@@ -32,6 +32,7 @@ Rectangle {
     Image {
         anchors.fill: parent
         source: "qrc:///AlmGine/AlmGine/Assets/Images/checkerboard800.bmp"
+        fillMode: Image.PreserveAspectCrop
     }
 
     Component {

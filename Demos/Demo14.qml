@@ -184,9 +184,10 @@ Rectangle {
                 id: model
                 source: "qrc:///AlmGine/AlmGine/Assets/Meshes/q2mdl-tekkblade/tris.md2"
                 position: Qt.vector3d(0, 100, 0)
-                rotation: Qt.vector3d(-90, 0, 0)
+                rotation: Qt.vector3d(0, 0, 0)
                 scale: Qt.vector3d(4, 4, 4)
                 pivot: Qt.vector3d(0, 0, 0)
+                attributes: Mesh.SwapYZ
                 castsShadow: true
 
                 materials: [
@@ -210,9 +211,10 @@ Rectangle {
                 id: model2
                 source: "qrc:///AlmGine/AlmGine/Assets/Meshes/q2mdl-tekkblade/tris.md2"
                 position: Qt.vector3d(0, 100, 200)
-                rotation: Qt.vector3d(-90, 0, 0)
+                rotation: Qt.vector3d(0, 0, 0)
                 scale: Qt.vector3d(4, 4, 4)
                 pivot: Qt.vector3d(0, 0, 0)
+                attributes: Mesh.SwapYZ
                 castsShadow: true
 
                 materials: [
