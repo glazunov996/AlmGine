@@ -96,11 +96,11 @@ Rectangle {
 
                 materials: [
                     Material {
-                        color: "blue"
+                        color: Qt.rgba(0, 0, 1, 1)
                         type: Material.Constant
                     },
                     Material {
-                        color: "red"
+                        color: Qt.rgba(1, 0, 0, 1)
                         type: Material.Constant
                     }
 

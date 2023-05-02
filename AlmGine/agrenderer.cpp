@@ -52,13 +52,20 @@ void AGRenderer::drawPixel(int x, int y, qreal u, qreal v, qreal z, qreal r, qre
     }
 }
 
-void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
-                              int x1, int y1, qreal z1, qreal u1, qreal v1,
-                              int x2, int y2, qreal z2, qreal u2, qreal v2,
+void AGRenderer::drawTriangle(qreal x0, qreal y0, qreal z0, qreal u0, qreal v0,
+                              qreal x1, qreal y1, qreal z1, qreal u1, qreal v1,
+                              qreal x2, qreal y2, qreal z2, qreal u2, qreal v2,
                               const std::array<QColor, 3> &litColors,
                               const AGTexture *texture,
                               const QColor &color)
 {
+    x0 = int(x0 + 0.5);
+    x1 = int(x1 + 0.5);
+    x2 = int(x2 + 0.5);
+    y0 = int(y0);
+    y1 = int(y1);
+    y2 = int(y2);
+
     if ((x0 == x1 && x1 == x2) || (y0 == y1 && y1 == y2))
         return;
 
@@ -195,14 +202,14 @@ void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
         dbdyr = ((b2 - b0)) / dyr;
         dyr = -y0;
         dyl = -y1;
-        xl = dxdyl * dyl + qreal(x1);
+        xl = dxdyl * dyl + x1;
         ul = dudyl * dyl + u1;
         vl = dvdyl * dyl + v1;
         zl = dzdyl * dyl + z1;
         rl = drdyl * dyl + r1;
         gl = dgdyl * dyl + g1;
         bl = dbdyl * dyl + b1;
-        xr = dxdyr * dyr + qreal(x0);
+        xr = dxdyr * dyr + x0;
         ur = dudyr * dyr + u0;
         vr = dvdyr * dyr + v0;
         zr = dzdyr * dyr + z0;
@@ -356,8 +363,8 @@ void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
         x1 < 0 || x1 >= m_image[0].width() - 1 ||
         x2 < 0 || x2 >= m_image[0].width() - 1) {
         for (int yi = ystart; yi <= yend; ++yi) {
-            int xstart = xl;
-            int xend = xr;
+            int xstart = xl + 0.5;
+            int xend = xr + 0.5;
             qreal ui = ul;
             qreal vi = vl;
             qreal zi = zl;
@@ -473,8 +480,8 @@ void AGRenderer::drawTriangle(int x0, int y0, qreal z0, qreal u0, qreal v0,
         }
     } else {
         for (int yi = ystart; yi <= yend; ++yi) {
-            int xstart = xl;
-            int xend = xr;
+            int xstart = xl + 0.5;
+            int xend = xr + 0.5;
             qreal ui = ul;
             qreal vi = vl;
             qreal zi = zl;
