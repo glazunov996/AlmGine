@@ -127,7 +127,7 @@ bool AGModel::isBackfaceCulled(AGCamera *camera, const QVector3D &normal, const 
     return QVector3D::dotProduct(normal, camera->position() - vertex) <= 0;
 }
 
-void AGModel::clipTriangle(AGCamera *camera, AGTriangle *triangle)
+void AGModel::clipTriangle(AGCamera *camera, const QSharedPointer<AGTriangle> &triangle)
 {
     const qreal zTest[3] = {
         camera->zFactor() * triangle->vertices[0].z(),
@@ -200,7 +200,7 @@ void AGModel::clipTriangle(AGCamera *camera, AGTriangle *triangle)
             triangle->texCoords[v[2]].setX(ui1);
             triangle->texCoords[v[2]].setY(vi1);
         } else if (in == 2) {
-            AGTriangle *newTriangle = new AGTriangle(*triangle);
+            QSharedPointer<AGTriangle> newTriangle = QSharedPointer<AGTriangle>(new AGTriangle(*triangle));
             if (flags[0] == 2) {
                 v[0] = 0;
                 v[1] = 1;
@@ -247,7 +247,7 @@ void AGModel::clipTriangle(AGCamera *camera, AGTriangle *triangle)
     m_dirtyTriangles.push_back(triangle);
 }
 
-void AGModel::lightTriangle(const QVector3D &normal, const QVector3D &firstVertex, const QList<AGLight *> &lights, AGTriangle *triangle)
+void AGModel::lightTriangle(const QVector3D &normal, const QVector3D &firstVertex, const QList<AGLight *> &lights,  const QSharedPointer<AGTriangle> &triangle)
 {
     const AGMaterial *material = triangle->material;
     if (material->type() == AGMaterial::Constant) {
@@ -334,12 +334,12 @@ void AGModel::castShadow(const QList<AGLight *> &lights)
     if (!m_castsShadow)
         return;
 
-    QList<AGTriangle *> newTriangles;
+    QList<QSharedPointer<AGTriangle>> newTriangles;
     for (const auto *light: lights) {
         if (!light->visible() || !light->castsShadow() || light->type() != AGLight::PointLight)
             continue;
-        for (auto *triangle: m_worldTriangles) {
-            AGTriangle *newTriangle = new AGTriangle(*triangle);
+        for (auto &triangle: m_worldTriangles) {
+            QSharedPointer<AGTriangle> newTriangle = QSharedPointer<AGTriangle>(new AGTriangle(*triangle));
             newTriangle->material = &m_shadowMaterial;
             for (int i = 0; i < 3; ++i) {
                 auto vertex = newTriangle->vertices[i];
@@ -412,7 +412,7 @@ void AGModel::updateObject(AGViewport *viewport)
             material = meshData.materials[i];
         if (material >= m_materials.length())
             material = m_materials.length() - 1;
-        auto *triangle = new AGTriangle();
+        QSharedPointer<AGTriangle> triangle = QSharedPointer<AGTriangle>(new AGTriangle);
         triangle->material = m_materials[material];
         for (int j = 0; j < 3; ++j) {
             triangle->vertices[j] = m_worldVertices[meshData.vertexIndices[i][j]];
@@ -425,7 +425,7 @@ void AGModel::updateObject(AGViewport *viewport)
 
     castShadow(viewport->m_lights);
 
-    for (auto *triangle: m_worldTriangles) {
+    for (auto &triangle: m_worldTriangles) {
         const auto &a = QVector3D(triangle->vertices[1] - triangle->vertices[0]);
         const auto &b = QVector3D(triangle->vertices[2] - triangle->vertices[0]);
         const auto &normal = QVector3D::crossProduct(a, b);

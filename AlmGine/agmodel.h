@@ -56,8 +56,8 @@ protected:
 private:
     QString translateMeshSource(QObject *contextObject);
     bool isBackfaceCulled(AGCamera *camera, const QVector3D &normal, const QVector3D &vertex) const;
-    void clipTriangle(AGCamera *camera, AGTriangle *triangle);
-    void lightTriangle(const QVector3D &normal, const QVector3D &firstVertex, const QList<AGLight *> &lights, AGTriangle *triangle);
+    void clipTriangle(AGCamera *camera, const QSharedPointer<AGTriangle> &triangle);
+    void lightTriangle(const QVector3D &normal, const QVector3D &firstVertex, const QList<AGLight *> &lights, const QSharedPointer<AGTriangle> &triangle);
     void castShadow(const QList<AGLight *> &lights);
     void loadMeshVertices();
     static void qmlAppendMaterial(QQmlListProperty<AGMaterial> *list, AGMaterial *material);
@@ -75,7 +75,7 @@ private:
     bool m_castsShadow = false;
     AGMaterial m_shadowMaterial;
     QList<QVector4D> m_worldVertices;
-    QList<AGTriangle *> m_worldTriangles;
-    QList<AGTriangle *> m_dirtyTriangles;
+    QList<QSharedPointer<AGTriangle>> m_worldTriangles;
+    QList<QSharedPointer<AGTriangle>> m_dirtyTriangles;
     qreal m_frameValue = 0.0;
 };

@@ -87,7 +87,7 @@ void AGViewport::setCamera(AGCamera *camera)
 
 void AGViewport::prepareRenderTriangles()
 {
-    static const auto isTriangleAverageZLessThan = [](AGTriangle *a, AGTriangle *b) {
+    static const auto isTriangleAverageZLessThan = [](const QSharedPointer<AGTriangle> &a, const QSharedPointer<AGTriangle> &b) {
         qreal z1 = (a->vertices[0].z() + a->vertices[1].z() + a->vertices[2].z()) / 3;
         qreal z2 = (b->vertices[0].z() + b->vertices[1].z() + b->vertices[2].z()) / 3;
         return z1 > z2;
@@ -95,8 +95,8 @@ void AGViewport::prepareRenderTriangles()
 
     std::sort(m_renderTriangles.begin(), m_renderTriangles.end(), isTriangleAverageZLessThan);
 
-    QList<AGTriangle *> shadowTriangles;
-    for (auto *triangle: m_renderTriangles) {
+    QList<QSharedPointer<AGTriangle>> shadowTriangles;
+    for (auto &triangle: m_renderTriangles) {
         if (triangle->material->type() == AGMaterial::Shadow) {
             shadowTriangles.push_back(triangle);
             continue;
@@ -116,7 +116,7 @@ void AGViewport::prepareRenderTriangles()
 
     m_renderer->beginDrawShadow();
 
-    for (auto *triangle: shadowTriangles) {
+    for (auto &triangle: shadowTriangles) {
         const QVector4D points[3] = {
             m_camera->mapToViewport(triangle->vertices[0]),
             m_camera->mapToViewport(triangle->vertices[1]),
@@ -137,7 +137,6 @@ void AGViewport::prepare()
     if (m_camera) {
         const QRectF inViewport = m_renderer->viewport();
         m_camera->calculateViewProjectionMatrix(inViewport);
-        qDeleteAll(m_renderTriangles);
         m_renderTriangles.clear();
         for (auto *model : m_models)
             model->updateObject(this);

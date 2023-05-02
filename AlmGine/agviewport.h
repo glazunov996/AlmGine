@@ -2,6 +2,7 @@
 
 #include <QQuickWindow>
 #include <QQuickPaintedItem>
+#include <QSharedPointer>
 #include <QImage>
 #include <QList>
 #include <QVariant>
@@ -57,7 +58,7 @@ public:
     QList<AGLight *> m_lights;
     AGRenderer *m_renderer = nullptr;
     AGCamera *m_camera = nullptr;
-    QList<AGTriangle *> m_renderTriangles;
+    QList<QSharedPointer<AGTriangle>> m_renderTriangles;
 
 private:
     static void qmlAppendModel(QQmlListProperty<AGModel> *list, AGModel *model);
